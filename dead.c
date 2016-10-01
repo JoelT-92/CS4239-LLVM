@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "dead2.h"
 
 int complex_function();
 void maybe_dead_function();
@@ -14,6 +15,14 @@ int main(void) {
 	function_always_called();
 	if (0) {
 		dead_function();
+	}
+
+	if (dead2_complex_function()) {
+		dead2_maybe_dead_function();
+	}
+	dead2_function_always_called();
+	if (0) {
+		dead2_dead_function();
 	}
 }
 
