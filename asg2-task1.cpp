@@ -33,12 +33,13 @@ int main(int argc, char **argv) {
 			return 1;
 		}
 	
+
 		// Step (2) Add all referenced functions in the C program
 		// This will include all STL function calls reference in program
 		Module::FunctionListType &functions = M->getFunctionList();
 		for (Module::FunctionListType::iterator it = functions.begin(), it_end = functions.end(); it != it_end; ++it) {
 		  Function &func = *it;
-		  if (func.getName() != "main") programFuncMap[func.getName()] = "DEAD";
+		  if (func.getName() != "main" && func.isDeclaration() != 1) programFuncMap[func.getName()] = "DEAD";
 		}
 
 		// Step (3) Traverse all instructions
