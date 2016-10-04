@@ -38,8 +38,10 @@ int main(int argc, char **argv) {
 		// This will include all STL function calls reference in program
 		Module::FunctionListType &functions = M->getFunctionList();
 		for (Module::FunctionListType::iterator it = functions.begin(), it_end = functions.end(); it != it_end; ++it) {
-		  Function &func = *it;
-		  if (func.getName() != "main" && func.isDeclaration() != 1) programFuncMap[func.getName()] = "DEAD";
+			Function &func = *it;
+		 	if ((func.getName() != "main") && (func.isDeclaration() != 1) && (programFuncMap.find(func.getName()) == programFuncMap.end())) {
+				programFuncMap[func.getName()] = "DEAD";
+			}
 		}
 
 		// Step (3) Traverse all instructions
