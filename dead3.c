@@ -6,6 +6,10 @@ void function5();
 void declareOnly1();
 int declareOnly2();
 
+void (*globalFuncPtrVoid) (void);
+int (*globalFuncPtrInt) (int);
+char* (*globalFuncPtrChar) (void);
+void (*globalNonsensePtr) (void);
 
 int main() {
   int mainInt1 = 1;
@@ -26,6 +30,26 @@ int main() {
 	  int input = 1;
 	  function3(input);
   }
+  
+  void (*localFuncPtrVoid)(void);
+  int (*localFuncPtrInt)(int);
+  void (*localFuncPtrNonsense)(void);
+  
+  localFuncPtrVoid = &function1;
+  localFuncPtrInt = &function3;
+  localFuncPtrNonsense = 0x12345;
+  
+  localFuncPtrVoid();
+  localFuncPtrInt(9999);
+  localFuncPtrNonsense();
+  
+  globalFuncPtrVoid = &function5;
+  globalNonsensePtr = 0xfffff;
+  
+  globalFuncPtrVoid();
+  globalFuncPtrInt(9999);
+  globalNonsensePtr();
+  
   return 0;
 }
 

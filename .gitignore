@@ -2,3 +2,7 @@
 *.h.gch
 asg2-task1
 *~
+callgraph.dot
+callgraph.png
+callgraphtest
+callgraphtest.cpp
