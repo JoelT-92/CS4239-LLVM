@@ -1,6 +1,7 @@
 *.ll
 *.h.gch
 asg2-task1
+asg2-task2
 *~
 callgraph.dot
 callgraph.png
