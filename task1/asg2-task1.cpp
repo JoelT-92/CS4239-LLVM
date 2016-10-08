@@ -159,7 +159,7 @@ void InvestigateStoreInst(StoreInst *S) {
                     break;
                 }
                 ptrType = pointedType;
-            } while (pt = dyn_cast<PointerType>(ptrType));
+            } while ((pt = dyn_cast<PointerType>(ptrType)));
         }
     }
 }
