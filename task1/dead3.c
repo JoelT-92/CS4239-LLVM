@@ -11,6 +11,11 @@ int (*globalFuncPtrInt) (int);
 char* (*globalFuncPtrChar) (void);
 void (*globalNonsensePtr) (void);
 
+typedef struct {
+	void (*p)();
+	int n;
+} apple;
+
 int main() {
   int mainInt1 = 1;
   int mainInt2 = 2;  
@@ -18,6 +23,10 @@ int main() {
   for (int i=0; i < 5; ++i) {
 	  int a = i;
   }
+  
+  apple b;
+  b.p = &function1;
+  b.p();
   
   while (1) {
 	  function1();
@@ -32,11 +41,11 @@ int main() {
   }
   
   void (*localFuncPtrVoid)(void);
-  int (*localFuncPtrInt)(int);
+  int (*localFuncPtrInt)(int) = &function3;
   void (*localFuncPtrNonsense)(void);
   
-  localFuncPtrVoid = &function1;
-  localFuncPtrInt = &function3;
+  localFuncPtrNonsense = &function4;
+  localFuncPtrVoid = localFuncPtrNonsense;
   localFuncPtrNonsense = 0x12345;
   
   localFuncPtrVoid();
@@ -56,6 +65,9 @@ int main() {
 void randomUndeclared();
 
 void function1() {
+  void (*localFuncPtrVoid)(void) = &function3;
+  
+  localFuncPtrVoid();
 	int inFunc1 = 1;
 	function2();
 }
