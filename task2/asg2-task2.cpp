@@ -31,19 +31,6 @@ int main(int argc, char **argv) {
 			fprintf(stderr, "failed to read IR file %s\n", argv[1]);
 			return 1;
 		}
-		
-		// Keep track of all global pointers in globalPtrVarMap
-		Module::GlobalListType &globals = M->getGlobalList();
-		for (Module::GlobalListType::iterator it = globals.begin(), it_end = globals.end(); it != it_end; ++it) {
-			GlobalVariable &globalVar = *it;			
-			Value *castGlobalValue = dyn_cast<Value>(&globalVar);
-			if (castGlobalValue != nullptr) {
-				PointerType *globalVarPtr = dyn_cast<PointerType>(castGlobalValue->getType()->getPointerElementType());
-				if (globalVarPtr != nullptr) {
-					globalPtrVarMap[globalVar.getName()] = "";
-				} 
-			} 
-		}
 	
 		// Step (2) Traverse all instructions
 		for (auto &F: *M) { // For each function F
@@ -63,15 +50,6 @@ int main(int argc, char **argv) {
 							LoadInst *loadInstr = dyn_cast<LoadInst>(&I);
 							latestLoadValue = loadInstr->getPointerOperand()->getName();
 							//cout << "Load name:" << loadInstr->getPointerOperand()->getName().str() << "\n";
-						}
-						
-						if (I.getOpcode() == Instruction::Store) {
-							StringRef srcValue = I.getOperand(0)->getName();
-							StringRef dstValue = I.getOperand(1)->getName();
-														
-							if ((allocaMap.find(srcValue) != allocaMap.end()) && (globalPtrVarMap.find(dstValue) != globalPtrVarMap.end())) {
-								errs() << "WARNING: pointer <" << srcValue << "> in the function <" << (&F)->getName() << "> tries to escape through the global pointer <" << dstValue << ">!" << "\n";
-							} 
 						}
 
 						if (I.getOpcode() == Instruction::Ret) {
