@@ -36,19 +36,13 @@ int main(int argc, char **argv) {
         for (auto &F: *M) { // For each function F
             if (F.getName() != "main") {
                 StringMap<StringRef> allocaMap;
-                StringRef latestLoadValue;
                 for (auto &BB: F) { // For each basic block BB
                     for (auto &I: BB) { // For each instruction I
                         if (I.getOpcode() == Instruction::Alloca) {
                             AllocaInst *allocInstr = dyn_cast<AllocaInst>(&I);
                             allocaMap[allocInstr->getName()] = "";
                         }
-
-                        if (I.getOpcode() == Instruction::Load) {
-                            LoadInst *loadInstr = dyn_cast<LoadInst>(&I);
-                            latestLoadValue = loadInstr->getPointerOperand()->getName();
-                        }
-
+                        
                         if (I.getOpcode() == Instruction::Ret) {
                             ReturnInst *R = dyn_cast<ReturnInst>(&I);
                             if (!R) continue;
