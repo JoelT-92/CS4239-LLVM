@@ -84,7 +84,7 @@ int main(int argc, char **argv) {
 							Constant *c = ga->getAliasee();
 							if (!c) continue;
 							c = cast<Constant>(c->stripPointerCasts());
-							errs() << c->getName() << "\n";
+							//errs() << c->getName() << "\n";
 							//ReturnInst *returnInstr = dyn_cast<ReturnInst>(&I);
 							if (R->getReturnValue() != nullptr) {
 								if (allocaMap.find(c->getName()) != allocaMap.end()) {
