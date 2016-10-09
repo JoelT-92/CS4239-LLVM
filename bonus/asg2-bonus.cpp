@@ -1,4 +1,4 @@
-#define DEBUG_TYPE "dead-function"
+#define DEBUG_TYPE "bonus"
 #include "llvm/DebugInfo.h"
 #include "llvm/IR/Function.h"
 #include "llvm/IR/Instructions.h"
