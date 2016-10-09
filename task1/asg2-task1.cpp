@@ -86,30 +86,30 @@ int main(int argc, char **argv) {
 }
 
 void InvestigateFunction(Function &F) {
-	for (auto &bb : F) {
-		for (auto &i : bb) {
-			StoreInst *S = dyn_cast<StoreInst>(&i);
-			if (S) InvestigateStoreInst(S);
-			CallSite Call(&i);
-			if (!Call) continue;
-			Function *G = Call.getCalledFunction();
-			if (G == nullptr) {
-				G = ResolveIndirectCall(Call);
-				if (G == nullptr) continue;
-			}
-			if (programFuncMap[G->getName()] != "LIVE") {
-				programFuncMap[G->getName()] = "LIVE";
-				if (definedFuncMap[G->getName()] != 0) { 
-					InvestigateFunction(*(definedFuncMap[G->getName()]));
-				}
-			}
-			else {
-				// Encountered a function that was already called.
-				// Prevent cycle by continue;
-				continue;
-			}
-		}
-	}
+    for (auto &bb : F) {
+        for (auto &i : bb) {
+            StoreInst *S = dyn_cast<StoreInst>(&i);
+            if (S) InvestigateStoreInst(S);
+            CallSite Call(&i);
+            if (!Call) continue;
+            Function *G = Call.getCalledFunction();
+            if (G == nullptr) {
+                G = ResolveIndirectCall(Call);
+                if (G == nullptr) continue;
+            }
+            if (programFuncMap[G->getName()] != "LIVE") {
+                programFuncMap[G->getName()] = "LIVE";
+                if (definedFuncMap[G->getName()] != 0) { 
+                    InvestigateFunction(*(definedFuncMap[G->getName()]));
+                }
+            }
+            else {
+                // Encountered a function that was already called.
+                // Prevent cycle by continue;
+                continue;
+            }
+        }
+    }
 }
 
 Function* ResolveIndirectCall(CallSite &CS) {
@@ -119,13 +119,13 @@ Function* ResolveIndirectCall(CallSite &CS) {
     Constant *c = ga->getAliasee();
     if (!c) return nullptr;
     c = cast<Constant>(c->stripPointerCasts());
-	while (!isa<AllocaInst>(c) && !isa<GlobalValue>(c)) {
-		ga = cast<GlobalAlias>(c);
-		if (!ga) return nullptr;
-		c = ga->getAliasee();
-		if (!c) return nullptr;
-		c = cast<Constant>(c->stripPointerCasts());
-	}
+    while (!isa<AllocaInst>(c) && !isa<GlobalValue>(c)) {
+        ga = cast<GlobalAlias>(c);
+        if (!ga) return nullptr;
+        c = ga->getAliasee();
+        if (!c) return nullptr;
+        c = cast<Constant>(c->stripPointerCasts());
+    }
     StringMap<Function*>::iterator sm = pointerFuncMap.find(c->getName());
     if (sm != pointerFuncMap.end()) {
         return sm->second;
@@ -157,14 +157,14 @@ void InvestigateStoreInst(StoreInst *S) {
                 {
                     GlobalAlias *gga = cast<GlobalAlias>(v);
                     if (gga) {
-						StringRef name;
-						if (isa<Argument>(gga))	name = gga->getName();
-						else name = gga->getAliasee()->getName();
-						if (pointerFuncMap.find(name) != pointerFuncMap.end()) {
-							pointerFuncMap[c->getName()] = pointerFuncMap[name];
-						} else {
-							pointerFuncMap[c->getName()] = nullptr;
-						}
+                        StringRef name;
+                        if (isa<Argument>(gga))    name = gga->getName();
+                        else name = gga->getAliasee()->getName();
+                        if (pointerFuncMap.find(name) != pointerFuncMap.end()) {
+                            pointerFuncMap[c->getName()] = pointerFuncMap[name];
+                        } else {
+                            pointerFuncMap[c->getName()] = nullptr;
+                        }
                     }
                     break;
                 }
