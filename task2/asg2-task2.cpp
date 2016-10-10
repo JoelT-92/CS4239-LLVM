@@ -53,11 +53,19 @@ int main(int argc, char **argv) {
                             Constant *c = ga->getAliasee();
                             if (!c) continue;
                             c = cast<Constant>(c->stripPointerCasts());
+                            while (!isa<AllocaInst>(c) && !isa<GlobalValue>(c)) {
+                                ga = cast<GlobalAlias>(c);
+                                if (!ga) goto end;
+                                c = ga->getAliasee();
+                                if (!c) goto end;
+                                c = cast<Constant>(c->stripPointerCasts());
+                            }
                             if (R->getReturnValue() != nullptr) {
                                 if (allocaMap.find(c->getName()) != allocaMap.end()) {
-                                    errs() << "WARNING: pointer <" << c->getName() << "> in the function <" << (&F)->getName().str() << "> will not exist after the return" << "\n";
+                                    errs() << "WARNING: variable <" << c->getName() << "> in the function <" << (&F)->getName().str() << "> will not exist after the return" << "\n";
                                 }
                             }
+                            end: continue;
                         }
                     }
                 }
