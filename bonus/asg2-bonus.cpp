@@ -19,7 +19,6 @@ using namespace std;
 StringMap<StringRef> globalPtrVarMap;
 
 int main(int argc, char **argv) {
-    
     // Step (1) Parse all IR files. 
     // Locate all main functions and store them in mainList
     // Assume that each main include all other files
@@ -49,7 +48,6 @@ int main(int argc, char **argv) {
         for (auto &F: *M) { // For each function F
             if (F.getName() != "main") {
                 StringMap<StringRef> allocaMap;
-                StringRef latestLoadValue;
                 for (auto &BB: F) { // For each basic block BB
                     for (auto &I: BB) { // For each instruction I
                         if (I.getOpcode() == Instruction::Alloca) {
