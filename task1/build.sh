@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "----------COMPILING TESTCASES----------"
-clang -g -S -emit-llvm -c dead.c dead2.c dead2.h dead3.c dead4.c
+clang -g -S -emit-llvm -c dead.c dead2.c dead3.c dead4.c dead5.c
 echo -e "\n"
 
 echo "----------COMPILING PROGRAM----------"
@@ -26,4 +26,8 @@ echo -e "\n"
 
 echo "----------RUNNING TEST 5----------"
 ./asg2-task1 dead4.ll
+echo -e "\n"
+
+echo "----------RUNNING TEST 6----------"
+./asg2-task1 dead5.ll
 echo -e "\n"

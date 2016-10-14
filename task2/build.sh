@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "----------COMPILING TESTCASES----------"
-clang -g -S -emit-llvm -c escape.c escape2.c
+clang -g -S -emit-llvm -c escape.c escape2.c escape3.c
 echo -e "\n"
 
 echo "----------COMPILING PROGRAM----------"
@@ -14,4 +14,8 @@ echo -e "\n"
 
 echo "----------RUNNING TEST 2----------"
 ./asg2-task2 escape2.ll 
+echo -e "\n"
+
+echo "----------RUNNING TEST 3----------"
+./asg2-task2 escape3.ll 
 echo -e "\n"
